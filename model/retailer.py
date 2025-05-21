@@ -1,0 +1,9 @@
+from dataclasses import dataclass
+@dataclass
+class retailer:
+    Retailer_code: int
+    Retailer_name: str
+    Type: str
+    Country: str
+    def __hash__(self):
+        return hash(self.Retailer_code)

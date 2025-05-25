@@ -19,6 +19,10 @@ class Controller:
     def current_country_set(self,e):
         if e is None: self._current_country=None
         else: self._current_country=e.control.data
+    def update_graph_text(self, testo):
+        self._view.txt_result.controls.append(ft.Text(testo))
+        self._view.update_page()
+
 
     def fillDD(self):
         self._listCountry = self._model.listNations
@@ -34,10 +38,15 @@ class Controller:
 
     def handle_graph(self, e):
         self._model._crea_grafo(self._current_country, self._current_year)
+        volumi=self._model.get_volumi()
+        for vol in volumi:
+            self._view.txtOut2.controls.append(ft.Text(f'Il venditore {vol.retN} ha volume: {vol.retV}'))
+        self._view.update_page()
 
     def handle_volume(self, e):
         pass
 
 
     def handle_path(self, e):
-        pass
+        max=3
+        self._model.calcola_percorso(max)

@@ -87,3 +87,28 @@ where gds.Retailer_code = gr.Retailer_code AND gr.Country = %s and YEAR(gds.date
         conn.close()
         return result
 
+    @staticmethod
+    def items_n_two_vendors(vend1, vend2, year):
+        conn = DBConnect.get_connection()
+        cursor = conn.cursor(dictionary=True)
+        print(f"STO PASSANDO ALLA QUERY: {vend1} / {vend2} / {year}")
+        query = """
+            select count(distinct(gds.Product_number)) as countW
+            from go_daily_sales gds , go_daily_sales gds2
+            where 
+            YEAR(gds.date) = %s
+            and YEAR(gds2.date) = %s
+            and gds.Retailer_code = %s
+            and gds2.Retailer_code = %s
+            and gds.Product_number = gds2.Product_number 
+        """
+        cursor.execute(query, (year,year,vend1, vend2))
+        #definisco il risultato come il valore del dict "count" del cursore dato dalla query
+        for row in cursor:
+            result=row["countW"]
+        print(f"ho ottenuto PESO = {result}")
+        cursor.close()
+        conn.close()
+        return result
+
+
